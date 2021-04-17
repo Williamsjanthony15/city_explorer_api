@@ -10,24 +10,25 @@ const app = express();
 app.use(cors());
 
 const PORT = process.env.PORT || 3001;
-
-
-//app.get method two arguments (endpoint, callback function(Can be multiple as well))
-app.get('/weather', (request, response) => {
-  try {
-  const allDailyForecasts = weatherData.data.map(day => new DailyForecast(day));
-  response.send('Looking for Weather?');
-} catch(error) {
-  handleErrors(error, response);
-}
-})
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 function DailyForecast(day){
   this.date = day.datetime;
   this.description = day.weather.description;
 }
 
-function handleErrors (error, response) {
-  response.status(500).send('Internal Server Error');
+app.get('/weather', (request, response) => {
+  try {
+  const allDailyForecasts = weatherData.data.map(day => new DailyForecast(day));
+  response.send(allDailyForecasts);
+} catch(error) {
+  console.error(error.message);
 }
-app.listen(PORT, () => console.log(`Listening on ${PORT}`))
+})
+// //app.get method two arguments (endpoint, callback function(Can be multiple as well))
+
+
+// function handleErrors (error, response) {
+//   response.status(500).send('Internal Server Error');
+// }
+// app.listen(PORT, () => console.log(`Listening on ${PORT}`))
