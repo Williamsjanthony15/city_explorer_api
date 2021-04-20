@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3001;
 app.get('/weather', (request, response) => {
   try {
   const allDailyForecasts = weatherData.data.map(day => new DailyForecast(day));
-  response.send('Looking for Weather?');
+  response.status(200).send(allDailyForecasts);
 } catch(error) {
   handleErrors(error, response);
 }
