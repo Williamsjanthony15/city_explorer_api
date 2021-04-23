@@ -23,6 +23,7 @@ app.get('/weather', (request, response) => {
   response.send(allDailyForecasts);
 } catch(error) {
   console.error(error.message);
+  response.status(500).send('Server Broken');
 }
 })
 // //app.get method two arguments (endpoint, callback function(Can be multiple as well))
