@@ -28,3 +28,29 @@ app.get('/weather', (request, response) => {
     response.status(500).send('Server Broken');
   }
 })
+
+function Movie(movie) {
+  this.title = movie.title;
+  this.overview = movie.overview;
+  this.averageVotes = movie.vote_average;
+  this.totalVotes = movie.vote_count;
+  this.imgURL = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
+  this.popularity = movie.popularity;
+  this.releasedOn = movie.release_date;
+}
+
+app.get('/movies', (request, response) => {
+  try {
+    superagent.get(`https://api.themoviedb.org/3/search/movie/?key=${process.env.MOVIE_API_KEY}&query=${request.query.city}`)
+      .then(results => {
+        console.log('these are your movie results', results.body.data.results);
+        const movieData = results.body.data.results.map(movie => new Movie(movie));
+        response.send(movieData);
+      })
+    return Promise.resolve(movieData);
+  } catch (error) {
+    return Promise.reject(error);
+    // console.error(error.message);
+    // response.status(500).send('Server Broken');
+  }
+})
