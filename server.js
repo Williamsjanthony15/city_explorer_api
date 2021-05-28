@@ -42,12 +42,12 @@ function Movie(movie) {
 app.get('/movies', (request, response) => {
   try {
     superagent.get(`https://api.themoviedb.org/3/search/movie/?key=${process.env.MOVIE_API_KEY}&query=${request.query.city}`)
-      .then(results => {
-        console.log('these are your movie results', results.body.data.results);
-        const movieData = results.body.data.results.map(movie => new Movie(movie));
+    .then(results => {
+      console.log('these are your movie results', results.body.data.results);
+      const movieData = results.body.data.results.map(movie => new Movie(movie));
         response.send(movieData);
+        return Promise.resolve(movieData);
       })
-    return Promise.resolve(movieData);
   } catch (error) {
     return Promise.reject(error);
     // console.error(error.message);
